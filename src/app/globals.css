@@ -1,26 +1,110 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+    --color-primary: oklch(0.6283 0.2099 13.6);
+    --color-secondary: oklch(0.8052 0.14596 65.2304);
+    --color-delete: oklch(0.1698 0.0538 24.97);
+    --color-red: oklch(0.628 0.2577 29.23);
+    --color-dark: oklch(0.1205 0.0097 252.89);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@layer utilities {
+    .mask-bottom {
+        mask-image: linear-gradient(to bottom, #030712 40%, transparent);
+        -webkit-mask-image: linear-gradient(to bottom, #030712 40%, transparent);
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Scrollbar oscuro para navegadores basados en WebKit (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+::-webkit-scrollbar-track {
+    background: #040609;
+    /* Fondo oscuro del track */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #040609;
+    /* Color del scroll */
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+    /* Color al pasar el mouse */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #262626 #040609;
+    /* Scroll animado al dar clic a un <a> para ir a una sección */
+    scroll-behavior: smooth;
+}
+
+/* No hacer animación de scroll si el usuario tiene las animaciones desactivadas */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        scroll-behavior: auto;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn .5s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeOut {
+    animation: fadeOut .5s ease-in-out forwards;
+}
+
+.toast-dark {
+    background-color: #040609 !important;
+    color: white !important;
+    border: 1px solid #262626 !important;
+    font-family: 'Inter', sans-serif !important;
+    border-radius: 12px !important;
+}
+
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    border: none;
 }
