@@ -4,9 +4,10 @@ import { useAssistantStore } from '@/store/assistantStore';
 
 type Props = {
     search: string;
+    onOpenModal: () => void;
 };
 
-export function AssistantList({ search }: Props) {
+export function AssistantList({ search, onOpenModal }: Props) {
     const assistants = useAssistantStore((state) => state.assistants);
 
     const filteredAssistants = assistants.filter((assistant) =>
@@ -28,6 +29,7 @@ export function AssistantList({ search }: Props) {
                 <AssistantCard
                     key={assistant.id}
                     assistant={assistant}
+                    onOpenModal={onOpenModal}
                 />
             ))}
         </div>

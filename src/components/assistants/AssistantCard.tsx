@@ -1,19 +1,17 @@
-type Assistant = {
-    id: string;
-    name: string;
-    description: string;
-    language: string;
-    tone: string;
-};
+import { Assistant } from '@/types/assistant';
 
 type Props = {
     assistant: Assistant;
+    onOpenModal: () => void;
 };
 
+import { useAssistantStore } from "@/store/assistantStore";
 import { BotIcon, BrainCircuitIcon, EditIcon, LanguagesIcon, MicVocalIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 
-export default function AssistantCard({ assistant }: Props) {
+export default function AssistantCard({ assistant, onOpenModal }: Props) {
+    const setAssistantToEdit = useAssistantStore((s) => s.setAssistantToEdit);
+
     return (
         <section className="bg-primary/5 border border-primary/20 rounded-xl p-5 space-y-6 hover:bg-primary/10 hover:border-primary/40 transition-colors duration-200">
             <header className="flex items-center gap-2 md:gap-3">
@@ -41,10 +39,15 @@ export default function AssistantCard({ assistant }: Props) {
                     <BrainCircuitIcon className="size-4 md:size-5" />
                     Entrenar
                 </Link>
-                <Link href="/dashboard" className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm w-full justify-center border border-neutral-800">
+                <button
+                    onClick={() => {
+                        setAssistantToEdit(assistant);
+                        onOpenModal();
+                    }}
+                    className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm w-full justify-center border border-neutral-800 cursor-pointer">
                     <EditIcon className="size-4 md:size-5" />
                     Editar
-                </Link>
+                </button>
                 <Link href="/dashboard" className="flex  items-center justify-center text-red bg-delete hover:bg-red-950 transition duration-200 px-5 py-2 rounded-lg w-1/5 md:w-auto border border-red-950">
                     <Trash2Icon className="size-4 md:size-5" />
                 </Link>

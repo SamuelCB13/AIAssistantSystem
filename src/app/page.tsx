@@ -6,11 +6,14 @@ import { PlusIcon, SearchIcon } from "lucide-react";
 import { AssistantList } from "@/components/assistants/AssistantList";
 import { AssistantListSkeleton } from '@/components/assistants/AssistantListSkeleton';
 import { AssistantModal } from "@/components/modal/AssistantModal";
+import { useAssistantStore } from "@/store/assistantStore";
 
 export default function Home() {
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const setAssistantToEdit = useAssistantStore((s) => s.setAssistantToEdit);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -52,7 +55,12 @@ export default function Home() {
                         className="w-full px-10 py-3 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-400 hover:border-neutral-600 duration-200 focus:outline-none focus:border-primary"
                     />
                 </div>
-                <button onClick={() => setIsModalOpen(true)} className="flex items-center gap-2 bg-primary text-white hover:bg-primary/40 transition duration-200 px-4 py-3 rounded-lg font-semibold text-sm xl:text-base w-full md:w-auto justify-center cursor-pointer">
+                <button
+                    onClick={() => {
+                        setAssistantToEdit(null);
+                        setIsModalOpen(true);
+                    }}
+                    className="flex items-center gap-2 bg-primary text-white hover:bg-primary/40 transition duration-200 px-4 py-3 rounded-lg font-semibold text-sm xl:text-base w-full md:w-auto justify-center cursor-pointer">
                     <PlusIcon className="size-4 md:size-5" />
                     Crear Asistente
                 </button>
@@ -62,7 +70,7 @@ export default function Home() {
                 {loading ? (
                     <AssistantListSkeleton />
                 ) : (
-                    <AssistantList search={search} />
+                    <AssistantList search={search} onOpenModal={() => setIsModalOpen(true)} />
                 )}
             </div>
 

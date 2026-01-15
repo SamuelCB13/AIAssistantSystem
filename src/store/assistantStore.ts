@@ -1,28 +1,40 @@
 import { create } from 'zustand';
+import { AssistantForm } from '@/types/assistant';
 
-export type Assistant = {
+export interface Assistant extends AssistantForm {
     id: string;
-    name: string;
-    language: string;
-    tone: string;
-    description: string;
-    responseLength: {
-        short: number;
-        medium: number;
-        long: number;
-    };
-    audioEnabled: boolean;
-};
+}
 
-type AssistantStore = {
+interface AssistantState {
     assistants: Assistant[];
-    addAssistant: (assistant: Assistant) => void;
-};
 
-export const useAssistantStore = create<AssistantStore>((set) => ({
+    // creación
+    addAssistant: (assistant: Assistant) => void;
+
+    // edición
+    assistantToEdit: Assistant | null;
+    setAssistantToEdit: (assistant: Assistant | null) => void;
+    updateAssistant: (assistant: Assistant) => void;
+}
+
+export const useAssistantStore = create<AssistantState>((set) => ({
     assistants: [],
+
     addAssistant: (assistant) =>
         set((state) => ({
             assistants: [...state.assistants, assistant],
+        })),
+
+    assistantToEdit: null,
+
+    setAssistantToEdit: (assistant) =>
+        set({ assistantToEdit: assistant }),
+
+    updateAssistant: (updatedAssistant) =>
+        set((state) => ({
+            assistants: state.assistants.map((a) =>
+                a.id === updatedAssistant.id ? updatedAssistant : a
+            ),
+            assistantToEdit: null,
         })),
 }));

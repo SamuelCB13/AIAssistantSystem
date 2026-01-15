@@ -1,9 +1,11 @@
 import { CheckIcon, CircleAlertIcon, MoveLeftIcon, MoveRightIcon, XIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { toast } from "@pheralb/toast";
 import { useAssistantStore } from '@/store/assistantStore';
+import { INITIAL_ASSISTANT_FORM } from "@/constants/assistantForm";
+import { AssistantForm } from "@/types/assistant";
 
 type Props = {
     open: boolean;
@@ -11,19 +13,12 @@ type Props = {
 };
 
 export function AssistantModal({ open, onClose }: Props) {
-    const [name, setName] = useState('');
-    const [language, setLanguage] = useState('');
-    const [tone, setTone] = useState('');
-    const [description, setDescription] = useState('');
+    const [form, setForm] = useState<AssistantForm>(INITIAL_ASSISTANT_FORM);
     const [step, setStep] = useState(1);
-    const [short, setShort] = useState(0);
-    const [medium, setMedium] = useState(0);
-    const [long, setLong] = useState(0);
-    const [audioEnabled, setAudioEnabled] = useState(false);
-    const total = short + medium + long;
-    const isStepTwoValid = total === 100;
 
-    const addAssistant = useAssistantStore((state) => state.addAssistant);
+    const { name, language, tone, description, responseLength } = form;
+    const { short, medium, long } = responseLength;
+    const total = short + medium + long;
 
     const isStepOneValid =
         name.trim() !== '' &&
@@ -31,20 +26,58 @@ export function AssistantModal({ open, onClose }: Props) {
         tone !== '' &&
         description !== '';
 
-    const resetForm = () => {
-        setName('');
-        setLanguage('');
-        setTone('');
-        setDescription('');
-        setShort(0);
-        setMedium(0);
-        setLong(0);
-        setAudioEnabled(false);
+    const isStepTwoValid =
+        total === 100 && short > 0 && medium > 0 && long > 0;
+
+    const assistantToEdit = useAssistantStore((s) => s.assistantToEdit);
+    const setAssistantToEdit = useAssistantStore((s) => s.setAssistantToEdit);
+    const updateAssistant = useAssistantStore((s) => s.updateAssistant);
+    const addAssistant = useAssistantStore((s) => s.addAssistant);
+
+    const isEditMode = Boolean(assistantToEdit);
+
+    useEffect(() => {
+        if (assistantToEdit) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setForm(assistantToEdit);
+            setStep(1);
+        } else {
+            setForm(INITIAL_ASSISTANT_FORM);
+        }
+    }, [assistantToEdit]);
+
+    const handleClose = () => {
+        setAssistantToEdit(null);
+        setForm(INITIAL_ASSISTANT_FORM);
         setStep(1);
+        onClose();
+    };
+
+    const updateField = <K extends keyof AssistantForm>(
+        field: K,
+        value: AssistantForm[K]
+    ) => {
+        setForm((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    const updateResponseLength = (
+        field: keyof AssistantForm['responseLength'],
+        value: number
+    ) => {
+        setForm((prev) => ({
+            ...prev,
+            responseLength: {
+                ...prev.responseLength,
+                [field]: value,
+            },
+        }));
     };
 
     const handleSave = () => {
-        if (!isStepTwoValid || short === 0 || medium === 0 || long === 0) {
+        if (!isStepTwoValid) {
             toast.error({
                 text: "Ha ocurrido un error.",
                 description: "La suma de respuestas debe ser 100 y ningún campo puede ser 0.",
@@ -52,29 +85,30 @@ export function AssistantModal({ open, onClose }: Props) {
             return;
         }
 
-        const newAssistant = {
-            id: crypto.randomUUID(),
-            name,
-            language,
-            tone,
-            description,
-            responseLength: {
-                short,
-                medium,
-                long,
-            },
-            audioEnabled,
-        };
+        if (isEditMode && assistantToEdit) {
+            updateAssistant({
+                ...form,
+                id: assistantToEdit.id,
+            });
 
-        addAssistant(newAssistant);
+            toast.success({
+                text: "Asistente editado con éxito.",
+                description: "Los cambios se han guardado correctamente.",
+            });
+        } else {
+            addAssistant({
+                ...form,
+                id: crypto.randomUUID(),
+            });
 
-        toast.success({
-            text: "Asistente creado con éxito.",
-            description: "Puedes verlo en la lista de asistentes.",
-        });
+            toast.success({
+                text: "Asistente creado con éxito.",
+                description: "Puedes verlo en la lista de asistentes.",
+            });
+        }
 
-        onClose();
-        resetForm();
+        handleClose();
+        setForm(INITIAL_ASSISTANT_FORM);
     };
 
     if (!open) return null;
@@ -84,14 +118,14 @@ export function AssistantModal({ open, onClose }: Props) {
             {/* Overlay */}
             <article
                 className="absolute inset-0 bg-black/90 backdrop-blur-sm"
-                onClick={onClose}
+                onClick={handleClose}
             />
 
             {/* Modal */}
             <article className="relative z-10 w-full max-w-4xl bg-dark border border-neutral-800 rounded-xl p-5 px-7 animate-fadeOut space-y-5">
                 <header>
                     <h2 className="text-2xl md:text-3xl 2xl:text-4xl font-black text-balance leading-tight text-white">
-                        Crear Asistente
+                        {isEditMode ? 'Editar Asistente' : 'Crear Asistente'}
                     </h2>
 
                     <div className="flex items-center justify-between border-b border-neutral-800 pb-3 my-4">
@@ -113,33 +147,33 @@ export function AssistantModal({ open, onClose }: Props) {
 
                 {step === 1 && (
                     <StepOne
-                        name={name}
-                        language={language}
-                        tone={tone}
-                        description={description}
-                        onNameChange={setName}
-                        onLanguageChange={setLanguage}
-                        onToneChange={setTone}
-                        onDescriptionChange={setDescription}
+                        name={form.name}
+                        language={form.language}
+                        tone={form.tone}
+                        description={form.description}
+                        onNameChange={(v) => updateField('name', v)}
+                        onLanguageChange={(v) => updateField('language', v)}
+                        onToneChange={(v) => updateField('tone', v)}
+                        onDescriptionChange={(v) => updateField('description', v)}
                     />
                 )}
 
                 {step === 2 && (
                     <StepTwo
-                        short={short}
-                        medium={medium}
-                        long={long}
-                        audioEnabled={audioEnabled}
-                        onShortChange={setShort}
-                        onMediumChange={setMedium}
-                        onLongChange={setLong}
-                        onAudioChange={setAudioEnabled}
+                        short={form.responseLength.short}
+                        medium={form.responseLength.medium}
+                        long={form.responseLength.long}
+                        audioEnabled={form.audioEnabled}
+                        onShortChange={(v) => updateResponseLength('short', v)}
+                        onMediumChange={(v) => updateResponseLength('medium', v)}
+                        onLongChange={(v) => updateResponseLength('long', v)}
+                        onAudioChange={(v) => updateField('audioEnabled', v)}
                     />
                 )}
 
                 {step === 1 && (
                     <div className="flex items-center justify-between gap-3">
-                        <button onClick={onClose} className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm justify-center border border-neutral-800 cursor-pointer">
+                        <button onClick={handleClose} className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm justify-center border border-neutral-800 cursor-pointer">
                             <XIcon className="size-4 md:size-5" />
                             Cancelar
                         </button>
@@ -182,40 +216,12 @@ export function AssistantModal({ open, onClose }: Props) {
                             onClick={handleSave}
                             className="flex items-center gap-2 text-white bg-primary hover:bg-primary/40 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm justify-center cursor-pointer"
                         >
-                            Guardar Asistente
+                            {isEditMode ? 'Guardar Cambios' : 'Guardar Asistente'}
                             <CheckIcon className="size-4 md:size-5" />
                         </button>
                     </div>
                 )}
             </article>
-
-            <div style={{ marginTop: 20 }}>
-                {step === 2 && (
-                    <button onClick={() => setStep(1)}>
-                        Atrás
-                    </button>
-                )}
-
-                {step === 1 && (
-                    <button onClick={() => setStep(2)}>
-                        Siguiente
-                    </button>
-                )}
-
-                {step === 2 && (
-                    <button
-                        disabled={!isStepTwoValid}
-                        className={`flex items-center gap-2 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm ${isStepTwoValid
-                            ? 'bg-primary hover:bg-primary/40 text-white'
-                            : 'bg-primary/30 text-white cursor-not-allowed'
-                            }
-                        `}
-                    >
-                        Guardar
-                    </button>
-                )}
-            </div>
-
         </section>
     );
 }
