@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤖 AI Assistant System
 
-## Getting Started
+Aplicación web construida con **Next.js + Zustand + TailwindCSS** que permite **crear, editar, eliminar, entrenar y simular asistentes conversacionales**, incluyendo reglas personalizadas y un chat de prueba en tiempo real.
 
-First, run the development server:
+---
 
+## 🚀 Características principales
+
+- 🧠 **Gestión de asistentes**
+  - Crear, editar y eliminar asistentes
+  - Configuración de idioma, tono y longitud de respuestas
+  - Asistentes predefinidos por defecto
+
+- 📚 **Entrenamiento por reglas**
+  - Definición de instrucciones personalizadas
+  - Guardado por asistente
+
+- 💬 **Chat simulado**
+  - Conversación independiente por asistente
+  - Indicador de escritura
+  - Scroll inteligente solo al enviar mensajes
+  - Reinicio de conversación
+
+- 🧩 **Arquitectura limpia**
+  - Estado global con Zustand
+  - Componentes reutilizables
+  - Separación clara de lógica y UI
+
+- 📱 **Responsive**
+  - Optimizado para desktop y mobile
+
+---
+
+## 🛠️ Tecnologías usadas
+
+- ⚡ **Next.js (App Router)**
+- 🧠 **Zustand** (State Management)
+- 🎨 **Tailwind CSS**
+- 🧩 **TypeScript**
+- 🔔 **@pheralb/toast**
+- 🎯 **Lucide Icons**
+
+---
+
+## 📦 Requisitos
+
+Asegúrate de tener instalado:
+
+- **Node.js** ≥ 18
+- **npm** o **pnpm** o **yarn**
+
+---
+
+## ▶️ Cómo correr el proyecto
+
+### 1️⃣ Clonar el repositorio
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/SamuelCB13/AIAssistantSystem.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Instalar dependencias
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3️⃣ Ejecutar en desarrollo
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+El proyecto estará disponible en:
 
-## Learn More
+👉 http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+## 🧠 Decisiones técnicas
+Tailwind CSS
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Se utilizó Tailwind por:
+- **Velocidad de desarrollo**
+- **Consistencia visual**
+- **Fácil adaptación responsive**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## ✨ Características implementadas
+- **CRUD completo de asistentes**
+- **Asistentes predefinidos**
+- **Entrenamiento mediante reglas/instrucciones**
+- **Guardado de regla por asistente**
+- **Chat simulado por asistente**
+- **Indicador de escritura del asistente**
+- **Modal paso a paso para creación/edición**
+- **Validaciones de formulario**
+- **UI responsive (desktop y mobile)**
 
-## Deploy on Vercel
+## ⏱️ Priorización y alcances
+Qué se dejó fuera (intencionalmente)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **React Query**
+- **TanStack Query**
+- **React Hook Form**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Qué se priorizó:
+
+- **Diseño inicial**
+- **Modal de creación y edición**
+- **Crud completo de asistentes**
+- **Sección de entrenamiento de asistentes**
+- **Chat simulado**
+- **Complemento de diseño**
+- **UI responsive (desktop y mobile)**
+
+## ⏳ Tiempo aproximado de dedicación
+- **Diseño inicial y arquitectura: 3h**
+- **Implementación de store y lógica: 3h**
+- **UI, modales y responsive: 4h**
+- **Chat simulado y UX refinements: 2h**
+- **Refactorización y limpieza: 1h**
+- **Creación del repositorio y archivo README: 1h**
+- **👉 Total aproximado: 14 horas**

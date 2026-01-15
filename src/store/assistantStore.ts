@@ -1,43 +1,35 @@
-import { create } from 'zustand';
-import { Assistant } from '@/types/assistant';
+import { create } from "zustand";
+import { Assistant } from "@/types/assistant";
+import { generateId } from "@/utils/id";
 
-// Chat
+/* 🗨️ Chat */
 export type ChatMessage = {
     id: string;
-    role: 'user' | 'assistant';
+    role: "user" | "assistant";
     content: string;
 };
-
-const SIMULATED_RESPONSES = [
-    'Claro, puedo ayudarte con eso. 🚀',
-    'Entendido. ¿Deseas que lo hagamos paso a paso? 📝',
-    'Buena pregunta, aquí tienes una posible solución. 💡',
-    'Perfecto, tomaré en cuenta tus instrucciones. ✍🏻',
-    'Déjame analizarlo un momento... 🤔',
-    'Esa es una excelente pregunta. Déjame explicarte... 📚',
-];
 
 interface AssistantState {
     assistants: Assistant[];
     nextId: number;
 
-    // Crear y editar
-    addAssistant: (assistant: Omit<Assistant, 'id'>) => void;
+    // create / edit
+    addAssistant: (assistant: Omit<Assistant, "id">) => void;
     updateAssistant: (assistant: Assistant) => void;
     assistantToEdit: Assistant | null;
     setAssistantToEdit: (assistant: Assistant | null) => void;
 
-    // Eliminar
+    // delete
     assistantToDelete: Assistant | null;
     setAssistantToDelete: (assistant: Assistant | null) => void;
     deleteAssistant: (id: string) => void;
 
-    // Entrenamiento
+    // training
     trainingRules: Record<string, string>;
     isSavingTraining: boolean;
     saveTraining: (id: string, rules: string) => Promise<void>;
 
-    // Chat
+    // chat
     chats: Record<string, ChatMessage[]>;
     isTyping: Record<string, boolean>;
     addUserMessage: (assistantId: string, message: string) => void;
@@ -46,10 +38,41 @@ interface AssistantState {
 }
 
 export const useAssistantStore = create<AssistantState>((set) => ({
-    assistants: [],
-    nextId: 1,
+    // 🧠 asistentes por defecto
+    assistants: [
+        {
+            id: "1",
+            name: "Asistente de Ventas",
+            description:
+                "Asistente especializado en ayudar a los clientes a encontrar los productos adecuados y cerrar ventas.",
+            language: "Español",
+            tone: "Profesional",
+            responseLength: {
+                short: 30,
+                medium: 50,
+                long: 20,
+            },
+            audioEnabled: true,
+        },
+        {
+            id: "2",
+            name: "Soporte Técnico",
+            description:
+                "Asistente enfocado en resolver problemas técnicos de manera eficiente.",
+            language: "Inglés",
+            tone: "Amigable",
+            responseLength: {
+                short: 20,
+                medium: 30,
+                long: 50,
+            },
+            audioEnabled: false,
+        },
+    ],
 
-    // Crear y editar
+    nextId: 3,
+
+    // create
     addAssistant: (assistant) =>
         set((state) => ({
             assistants: [
@@ -62,6 +85,7 @@ export const useAssistantStore = create<AssistantState>((set) => ({
             nextId: state.nextId + 1,
         })),
 
+    // edit
     updateAssistant: (updated) =>
         set((state) => ({
             assistants: state.assistants.map((a) =>
@@ -73,7 +97,7 @@ export const useAssistantStore = create<AssistantState>((set) => ({
     assistantToEdit: null,
     setAssistantToEdit: (assistant) => set({ assistantToEdit: assistant }),
 
-    // Eliminar
+    // delete
     assistantToDelete: null,
     setAssistantToDelete: (assistant) => set({ assistantToDelete: assistant }),
 
@@ -83,8 +107,12 @@ export const useAssistantStore = create<AssistantState>((set) => ({
             assistantToDelete: null,
         })),
 
-    // Entrenar
-    trainingRules: {},
+    // training
+    trainingRules: {
+        "1": `Eres un asistente especializado en ventas. Siempre sé cordial y enfócate en identificar necesidades del cliente antes de ofrecer productos.`.trim(),
+        "2": `Ayudas a resolver problemas técnicos de manera clara y paso a paso. Siempre confirma que el usuario haya entendido antes de continuar.`.trim(),
+    },
+
     isSavingTraining: false,
 
     saveTraining: async (id, rules) => {
@@ -101,7 +129,7 @@ export const useAssistantStore = create<AssistantState>((set) => ({
         }));
     },
 
-    // Chat
+    // chat
     chats: {},
     isTyping: {},
 
@@ -112,8 +140,8 @@ export const useAssistantStore = create<AssistantState>((set) => ({
                 [assistantId]: [
                     ...(state.chats[assistantId] || []),
                     {
-                        id: crypto.randomUUID(),
-                        role: 'user',
+                        id: generateId(),
+                        role: "user",
                         content: message,
                     },
                 ],
@@ -122,19 +150,24 @@ export const useAssistantStore = create<AssistantState>((set) => ({
 
     addAssistantMessage: async (assistantId) => {
         set((state) => ({
-            isTyping: {
-                ...state.isTyping,
-                [assistantId]: true,
-            },
+            isTyping: { ...state.isTyping, [assistantId]: true },
         }));
 
-        const delay = Math.random() * 1000 + 1000;
-        await new Promise((res) => setTimeout(res, delay));
+        await new Promise((res) =>
+            setTimeout(res, 1000 + Math.random() * 1000)
+        );
 
-        const response =
-            SIMULATED_RESPONSES[
-                Math.floor(Math.random() * SIMULATED_RESPONSES.length)
-            ];
+        const responses = [
+            'Claro, puedo ayudarte con eso. 🚀',
+            'Entendido. ¿Deseas que lo hagamos paso a paso? 📝',
+            'Buena pregunta, aquí tienes una posible solución. 💡',
+            'Perfecto, tomaré en cuenta tus instrucciones. ✍🏻',
+            'Déjame analizarlo un momento... 🤔',
+            'Esa es una excelente pregunta. Déjame explicarte... 📚',
+        ];
+
+        const reply =
+            responses[Math.floor(Math.random() * responses.length)];
 
         set((state) => ({
             chats: {
@@ -142,16 +175,13 @@ export const useAssistantStore = create<AssistantState>((set) => ({
                 [assistantId]: [
                     ...(state.chats[assistantId] || []),
                     {
-                        id: crypto.randomUUID(),
-                        role: 'assistant',
-                        content: response,
+                        id: generateId(),
+                        role: "assistant",
+                        content: reply,
                     },
                 ],
             },
-            isTyping: {
-                ...state.isTyping,
-                [assistantId]: false,
-            },
+            isTyping: { ...state.isTyping, [assistantId]: false },
         }));
     },
 

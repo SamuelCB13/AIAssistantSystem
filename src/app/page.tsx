@@ -27,14 +27,6 @@ export default function Home() {
         return () => clearTimeout(timer);
     }, []);
 
-    useEffect(() => {
-        toast.default({
-            text: "¡Bienvenidxs a AI Assistant!",
-            description: "Tu plataforma para crear asistentes de IA personalizados. 🤖",
-            icon: "🎉",
-        });
-    }, []);
-
     return (
         <section className="flex flex-col p-5 sm:p-8 space-y-5">
             <header className="max-w-7xl mx-auto w-full">
@@ -56,7 +48,7 @@ export default function Home() {
                         placeholder="Buscar asistentes por nombre..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full px-10 py-3 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-400 hover:border-neutral-600 duration-200 focus:outline-none focus:border-primary"
+                        className="w-full px-10 py-2 bg-neutral-950 border border-neutral-800 rounded-xl text-white placeholder:text-neutral-400 hover:border-neutral-600 duration-200 focus:outline-none focus:border-primary"
                     />
                 </div>
                 <button
@@ -64,7 +56,7 @@ export default function Home() {
                         setAssistantToEdit(null);
                         setIsModalOpen(true);
                     }}
-                    className="flex items-center gap-2 bg-primary text-white hover:bg-primary/40 transition duration-200 px-4 py-3 rounded-lg font-semibold text-sm xl:text-base w-full md:w-auto justify-center cursor-pointer">
+                    className="flex items-center gap-2 bg-primary text-white hover:bg-primary/40 transition duration-200 px-5 py-2 rounded-lg font-semibold text-sm xl:text-base w-full md:w-auto justify-center cursor-pointer">
                     <PlusIcon className="size-4 md:size-5" />
                     Crear Asistente
                 </button>
@@ -95,7 +87,6 @@ export default function Home() {
 
                     toast.success({
                         text: 'Asistente eliminado con éxito.',
-                        description: 'El asistente fue eliminado correctamente.',
                     });
                 }}
             />

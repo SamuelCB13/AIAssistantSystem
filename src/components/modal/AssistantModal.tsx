@@ -94,7 +94,6 @@ export function AssistantModal({ open, onClose }: Props) {
 
             toast.success({
                 text: "Asistente editado con éxito.",
-                description: "Los cambios se han guardado correctamente.",
             });
         } else {
             addAssistant({
@@ -103,7 +102,6 @@ export function AssistantModal({ open, onClose }: Props) {
 
             toast.success({
                 text: "Asistente creado con éxito.",
-                description: "Puedes verlo en la lista de asistentes.",
             });
         }
 
@@ -122,26 +120,66 @@ export function AssistantModal({ open, onClose }: Props) {
             />
 
             {/* Modal */}
-            <article className="relative z-10 w-full max-w-4xl bg-dark border border-neutral-800 rounded-xl p-5 px-7 animate-fadeOut space-y-5">
-                <header>
-                    <h2 className="text-2xl md:text-3xl 2xl:text-4xl font-black text-balance leading-tight text-white">
-                        {isEditMode ? 'Editar Asistente' : 'Crear Asistente'}
-                    </h2>
-
-                    <div className="flex flex-col md:flex-row text-center items-center justify-between border-b border-neutral-800 pb-3 my-4">
-                        {step === 1 ? (
-                            <p className="text-sm md:text-base xl:text-lg text-neutral-400 text-pretty leading-relaxed">
-                                Paso 1: Datos básicos
-                            </p>
-                        ) : (
-                            <p className="text-sm md:text-base xl:text-lg text-neutral-400 text-pretty leading-relaxed">
-                                Paso 2: Configuración de Respuestas
-                            </p>
-                        )}
-
-                        <p className="block text-sm text-neutral-600 italic">
+            <article className="relative z-10 w-full max-w-4xl bg-dark border border-neutral-800 rounded-xl p-5 px-7 animate-fadeOut space-y-5 max-h-[90dvh] overflow-y-auto">
+                <header className="space-y-3">
+                    <div className="flex flex-col md:flex-row text-center items-center justify-between gap-2">
+                        <h2 className="text-2xl md:text-3xl 2xl:text-4xl font-black text-balance leading-tight text-white">
+                            {isEditMode ? 'Editar Asistente' : 'Crear Asistente'}
+                        </h2>
+                        <p className="block text-xs md:text-sm text-neutral-600 italic">
                             Los campos marcados con  <span className="text-primary font-bold">*</span> son obligatorios.
                         </p>
+                    </div>
+
+                    {step === 1 ? (
+                        <p className="text-sm md:text-base text-neutral-400 text-pretty leading-relaxed">
+                            Paso 1: Datos básicos
+                        </p>
+                    ) : (
+                        <p className="text-sm md:text-base text-neutral-400 text-pretty leading-relaxed">
+                            Paso 2: Configuración de Respuestas
+                        </p>
+                    )}
+
+                    <div className="flex items-center justify-center gap-5 w-full border-b border-neutral-800 pb-3 my-4">
+                        {/* Paso 1 */}
+                        <div className="flex items-center">
+                            <div
+                                className={`flex items-center justify-center size-7 rounded-full border text-xs font-bold transition ${step >= 1
+                                    ? "bg-primary border-primary text-white"
+                                    : "border-neutral-700 text-neutral-500"
+                                    }`}
+                            >
+                                1
+                            </div>
+                            <span
+                                className={`ml-2 text-xs md:text-sm ${step >= 1 ? "text-primary" : "text-neutral-500"}`}
+                            >
+                                Datos básicos
+                            </span>
+                        </div>
+
+                        {/* Línea */}
+                        <div
+                            className={`hidden md:flex mx-4 h-0.5 w-12 md:w-20 transition ${step === 2 ? "bg-primary" : "bg-neutral-800"}`}
+                        />
+
+                        {/* Paso 2 */}
+                        <div className="flex items-center">
+                            <div
+                                className={`flex items-center justify-center size-7 rounded-full border text-xs font-bold transition ${step === 2
+                                    ? "bg-primary border-primary text-white"
+                                    : "border-neutral-700 text-neutral-500"
+                                    }`}
+                            >
+                                2
+                            </div>
+                            <span
+                                className={`ml-2 text-xs md:text-sm ${step === 2 ? "text-primary" : "text-neutral-500"}`}
+                            >
+                                Configuración
+                            </span>
+                        </div>
                     </div>
                 </header>
 

@@ -40,7 +40,7 @@ export default function Navbar() {
                     {/* Botón hamburguesa para móvil */}
                     <button
                         onClick={toggleMenu}
-                        className="lg:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-neutral-400 rounded-lg hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-neutral-600 transition-all duration-200"
+                        className="lg:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-neutral-400 rounded-lg hover:bg-neutral-800 hover:text-white focus:outline-none focus:ring-2 focus:ring-neutral-600 transition-colors duration-200"
                         aria-controls="navbar-menu"
                         aria-expanded={isMenuOpen}
                         aria-label="Abrir menú de navegación"
