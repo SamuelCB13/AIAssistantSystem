@@ -1,20 +1,14 @@
 import { XIcon } from 'lucide-react';
 import AssistantCard from './AssistantCard';
-
-type Assistant = {
-    id: string;
-    name: string;
-    description: string;
-    language: string;
-    tone: string;
-};
+import { useAssistantStore } from '@/store/assistantStore';
 
 type Props = {
-    assistants: Assistant[];
     search: string;
 };
 
-export function AssistantList({ assistants, search }: Props) {
+export function AssistantList({ search }: Props) {
+    const assistants = useAssistantStore((state) => state.assistants);
+
     const filteredAssistants = assistants.filter((assistant) =>
         assistant.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -23,7 +17,7 @@ export function AssistantList({ assistants, search }: Props) {
         return (
             <div className="flex items-center justify-center gap-1 text-secondary py-10">
                 <XIcon className="size-5" />
-                No se encontraron resultados...
+                No se encontraron asistentes...
             </div>
         );
     }

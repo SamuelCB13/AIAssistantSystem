@@ -3,6 +3,7 @@ import { useState } from "react";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import { toast } from "@pheralb/toast";
+import { useAssistantStore } from '@/store/assistantStore';
 
 type Props = {
     open: boolean;
@@ -22,11 +23,25 @@ export function AssistantModal({ open, onClose }: Props) {
     const total = short + medium + long;
     const isStepTwoValid = total === 100;
 
+    const addAssistant = useAssistantStore((state) => state.addAssistant);
+
     const isStepOneValid =
         name.trim() !== '' &&
         language !== '' &&
         tone !== '' &&
         description !== '';
+
+    const resetForm = () => {
+        setName('');
+        setLanguage('');
+        setTone('');
+        setDescription('');
+        setShort(0);
+        setMedium(0);
+        setLong(0);
+        setAudioEnabled(false);
+        setStep(1);
+    };
 
     const handleSave = () => {
         if (!isStepTwoValid || short === 0 || medium === 0 || long === 0) {
@@ -34,22 +49,32 @@ export function AssistantModal({ open, onClose }: Props) {
                 text: "Ha ocurrido un error.",
                 description: "La suma de respuestas debe ser 100 y ningún campo puede ser 0.",
             });
-        } else {
-            toast.success({
-                text: "Asistente creado con éxito.",
-                description: "Puedes verlo en la lista de asistentes.",
-            });
-            console.log({
-                name,
-                language,
-                tone,
-                description,
+            return;
+        }
+
+        const newAssistant = {
+            id: crypto.randomUUID(),
+            name,
+            language,
+            tone,
+            description,
+            responseLength: {
                 short,
                 medium,
                 long,
-                audioEnabled,
-            });
+            },
+            audioEnabled,
         };
+
+        addAssistant(newAssistant);
+
+        toast.success({
+            text: "Asistente creado con éxito.",
+            description: "Puedes verlo en la lista de asistentes.",
+        });
+
+        onClose();
+        resetForm();
     };
 
     if (!open) return null;

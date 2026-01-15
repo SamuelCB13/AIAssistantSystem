@@ -1,29 +1,5 @@
 "use client";
 
-const assistants = [
-    {
-        id: '1',
-        name: 'Asistente de Ventas',
-        description: 'Ayuda a responder preguntas frecuentes de clientes. No sé qué más poner aquí, solo hago esto para que el texto se vea más largo y ocupe espacio.',
-        language: 'Español',
-        tone: 'Profesional',
-    },
-    {
-        id: '2',
-        name: 'Soporte Técnico',
-        description: 'Ayuda a responder preguntas frecuentes de clientes. No sé qué más poner aquí, solo hago esto para que el texto se vea más largo y ocupe espacio.',
-        language: 'Inglés',
-        tone: 'Amigable',
-    },
-    {
-        id: '3',
-        name: 'Assistant IA',
-        description: 'Ayuda a responder preguntas frecuentes de clientes. No sé qué más poner aquí, solo hago esto para que el texto se vea más largo y ocupe espacio.',
-        language: 'Francés',
-        tone: 'Casual',
-    },
-];
-
 import { useEffect, useState } from "react";
 import { toast } from "@pheralb/toast";
 import { PlusIcon, SearchIcon } from "lucide-react";
@@ -86,7 +62,7 @@ export default function Home() {
                 {loading ? (
                     <AssistantListSkeleton />
                 ) : (
-                    <AssistantList assistants={assistants} search={search} />
+                    <AssistantList search={search} />
                 )}
             </div>
 
