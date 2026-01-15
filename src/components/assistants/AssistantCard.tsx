@@ -36,7 +36,9 @@ export default function AssistantCard({ assistant, onOpenModal }: Props) {
             </article>
             <hr className="text-neutral-800 rounded-full" />
             <footer className="flex items-center gap-4 md:gap-5">
-                <Link href="/dashboard" className="flex items-center gap-2 bg-primary text-white hover:bg-primary/40 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm w-full justify-center">
+                <Link
+                    href={`/assistant/${assistant.id}`}
+                    className="flex items-center gap-2 bg-primary text-white hover:bg-primary/40 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm w-full justify-center">
                     <BrainCircuitIcon className="size-4 md:size-5" />
                     Entrenar
                 </Link>

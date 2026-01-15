@@ -22,6 +22,7 @@ export function AssistantModal({ open, onClose }: Props) {
 
     const isStepOneValid =
         name.trim() !== '' &&
+        name.length >= 3 &&
         language !== '' &&
         tone !== '' &&
         description !== '';
@@ -98,7 +99,6 @@ export function AssistantModal({ open, onClose }: Props) {
         } else {
             addAssistant({
                 ...form,
-                id: crypto.randomUUID(),
             });
 
             toast.success({
@@ -128,7 +128,7 @@ export function AssistantModal({ open, onClose }: Props) {
                         {isEditMode ? 'Editar Asistente' : 'Crear Asistente'}
                     </h2>
 
-                    <div className="flex items-center justify-between border-b border-neutral-800 pb-3 my-4">
+                    <div className="flex flex-col md:flex-row text-center items-center justify-between border-b border-neutral-800 pb-3 my-4">
                         {step === 1 ? (
                             <p className="text-sm md:text-base xl:text-lg text-neutral-400 text-pretty leading-relaxed">
                                 Paso 1: Datos básicos
@@ -172,15 +172,15 @@ export function AssistantModal({ open, onClose }: Props) {
                 )}
 
                 {step === 1 && (
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-3">
                         <button onClick={handleClose} className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm justify-center border border-neutral-800 cursor-pointer">
                             <XIcon className="size-4 md:size-5" />
                             Cancelar
                         </button>
 
                         {!isStepOneValid && (
-                            <p className="flex items-center justify-center gap-1 text-sm text-primary">
-                                <CircleAlertIcon className="size-5" />
+                            <p className="flex items-center justify-center gap-2 text-xs md:text-sm text-secondary">
+                                <CircleAlertIcon className="size-3 md:size-4" />
                                 Completa todos los campos para continuar.
                             </p>
                         )}
@@ -196,7 +196,7 @@ export function AssistantModal({ open, onClose }: Props) {
                 )}
 
                 {step === 2 && (
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-3">
                         <button
                             onClick={() => setStep(1)}
                             className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm justify-center border border-neutral-800 cursor-pointer"
@@ -206,8 +206,8 @@ export function AssistantModal({ open, onClose }: Props) {
                         </button>
 
                         {total !== 100 && (
-                            <p className="flex items-center justify-center gap-1 text-sm text-secondary">
-                                <CircleAlertIcon className="size-5" />
+                            <p className="flex items-center justify-center gap-2 text-xs md:text-sm text-secondary">
+                                <CircleAlertIcon className="size-3 md:size-4" />
                                 La suma de respuestas debe ser 100. Actualmente es {total}.
                             </p>
                         )}

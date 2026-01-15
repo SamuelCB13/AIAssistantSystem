@@ -36,8 +36,8 @@ export default function Home() {
     }, []);
 
     return (
-        <section className="flex flex-col xl:min-h-[93dvh] p-5 sm:p-8 space-y-5">
-            <article className="max-w-7xl mx-auto w-full">
+        <section className="flex flex-col p-5 sm:p-8 space-y-5">
+            <header className="max-w-7xl mx-auto w-full">
                 <h1 className="text-2xl md:text-3xl 2xl:text-4xl font-black text-balance leading-tight text-white">
                     Asistentes de IA
                 </h1>
@@ -45,7 +45,7 @@ export default function Home() {
                 <p className="text-sm md:text-base xl:text-lg text-neutral-400 text-pretty leading-relaxed">
                     Crea, entrena y gestiona tus asistentes personalizados.
                 </p>
-            </article>
+            </header>
 
             <article className="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto w-full gap-5 animate-fadeIn">
                 {/* Buscador */}

@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { Toaster } from "@pheralb/toast";
 import { XIcon } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 const inter = Inter({ subsets: ['latin'] })
@@ -37,7 +36,6 @@ export default function RootLayout({
                                 }
                             }}
                         />
-                        <Footer />
                     </main>
                 </div>
             </body>
