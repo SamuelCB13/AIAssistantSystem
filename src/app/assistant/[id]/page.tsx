@@ -8,6 +8,8 @@ import { useAssistantStore } from "@/store/assistantStore";
 import { AssistantHeader } from "../components/AssistantHeader";
 import { TrainingPanel } from "../components/TrainingPanel";
 import { ChatPanel } from "../components/ChatPanel";
+import { MoveLeftIcon } from "lucide-react";
+import Link from "next/link";
 
 export default function AssistantTrainingPage() {
     const { id } = useParams<{ id: string }>();
@@ -95,6 +97,16 @@ export default function AssistantTrainingPage() {
                     isTyping={isTyping}
                 />
             </aside>
+
+            <footer className="flex items-center md:justify-start justify-center gap-5 max-w-7xl mx-auto w-full animate-fadeIn">
+                <Link
+                    href="/"
+                    className="flex items-center gap-2 text-white bg-black hover:bg-neutral-800 transition duration-200 px-5 py-2 rounded-lg font-semibold text-xs xl:text-sm justify-center border border-neutral-800 cursor-pointer"
+                >
+                    <MoveLeftIcon className="" />
+                    Volver atrás
+                </Link>
+            </footer>
         </section>
     );
 }
